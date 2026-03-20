@@ -18,8 +18,28 @@ import {
   ChevronRight,
   Layers,
   Activity,
-  Server
+  Server,
+  Box
 } from 'lucide-react';
+import { 
+  SiDocker, 
+  SiKubernetes, 
+  SiTerraform, 
+  SiAnsible, 
+  SiHelm, 
+  SiArgo, 
+  SiGithubactions,
+  SiGooglecloud,
+  SiPython,
+  SiLinux,
+  SiJenkins,
+  SiPrometheus,
+  SiGrafana,
+  SiSonarqubecloud,
+  SiDynatrace
+} from 'react-icons/si';
+import { FaAws } from 'react-icons/fa';
+import { VscAzure, VscAzureDevops } from 'react-icons/vsc';
 import { motion } from 'motion/react';
 
 const RESUME_DATA = {
@@ -28,16 +48,31 @@ const RESUME_DATA = {
   location: "Pune, Maharashtra",
   phone: "8007370003",
   email: "wasimahamad.mulla@gmail.com",
-  linkedin: "linkedin.com/in/wasimahamad",
+  linkedin: "https://linkedin.com/in/wasimahamad",
+  github: "https://github.com/vasssiim",
   summary: "Results-driven DevOps Engineer with 4+ years of experience designing, building, and operating cloud-native platforms on AWS and Azure. Expertise in Kubernetes, Terraform (IaC), CI/CD automation, DevSecOps, and observability.",
+  coreTech: [
+    { name: "AWS", icon: FaAws, color: "#FF9900" },
+    { name: "Docker", icon: SiDocker, color: "#2496ED" },
+    { name: "Kubernetes", icon: SiKubernetes, color: "#326CE5" },
+    { name: "Terraform", icon: SiTerraform, color: "#7B42BC" },
+    { name: "Ansible", icon: SiAnsible, color: "#EE0000" },
+    { name: "Helm", icon: SiHelm, color: "#0F1628" },
+    { name: "ArgoCD", icon: SiArgo, color: "#EF7B4D" },
+    { name: "GitHub Actions", icon: SiGithubactions, color: "#2088FF" },
+    { name: "Jenkins", icon: SiJenkins, color: "#D24939" },
+    { name: "Prometheus", icon: SiPrometheus, color: "#E6522C" },
+    { name: "Grafana", icon: SiGrafana, color: "#F46800" },
+    { name: "SonarQube", icon: SiSonarqubecloud, color: "#4E9BCD" },
+    { name: "Dynatrace", icon: SiDynatrace, color: "#734796" },
+  ],
   skills: [
     { category: "Cloud Platforms", items: ["AWS", "Azure", "GCP"], icon: Cloud },
     { category: "Containers & Orchestration", items: ["Docker", "Kubernetes", "EKS", "AKS", "Helm"], icon: Container },
-    { category: "Infrastructure as Code", items: ["Terraform", "ARM Templates"], icon: Server },
-    { category: "CI/CD & Version Control", items: ["Jenkins", "Azure DevOps", "GitHub Actions", "Argo CD"], icon: Activity },
-    { category: "Security & Monitoring", items: ["IAM", "SonarQube", "CloudWatch", "Prometheus", "Grafana"], icon: ShieldCheck },
-    { category: "Programming", items: ["Python", "Shell Scripting"], icon: Terminal },
-    { category: "AI/ML", items: ["SageMaker", "Bedrock", "MLOps"], icon: Cpu }
+    { category: "Infrastructure as Code", items: ["Terraform", "Ansible", "ARM Templates"], icon: Server },
+    { category: "CI/CD & Version Control", items: ["GitHub Actions", "Argo CD", "Jenkins", "Azure DevOps"], icon: Activity },
+    { category: "Security & Monitoring", items: ["IAM", "SonarQube", "Prometheus", "Grafana", "Dynatrace", "CloudWatch"], icon: ShieldCheck },
+    { category: "Programming & OS", items: ["Python", "Shell Scripting", "Linux (RHEL/Ubuntu)"], icon: Terminal },
   ],
   experience: [
     {
@@ -129,6 +164,13 @@ const SectionHeading = ({ children, icon: Icon }: { children: React.ReactNode, i
 
 export default function App() {
   const [scrolled, setScrolled] = useState(false);
+  const [showEmailToast, setShowEmailToast] = useState(false);
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText(RESUME_DATA.email);
+    setShowEmailToast(true);
+    setTimeout(() => setShowEmailToast(false), 3000);
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -181,23 +223,62 @@ export default function App() {
               {RESUME_DATA.summary}
             </p>
             <div className="flex flex-wrap gap-4">
-              <a 
-                href={`mailto:${RESUME_DATA.email}`}
-                className="flex items-center gap-2 px-8 py-4 bg-zinc-900 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-zinc-900/20 hover:shadow-emerald-600/20"
-              >
-                <Mail className="w-5 h-5" />
-                Get in touch
-              </a>
+              <div className="relative">
+                <a 
+                  href={`mailto:${RESUME_DATA.email}`}
+                  className="flex items-center gap-2 px-8 py-4 bg-zinc-900 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-zinc-900/20 hover:shadow-emerald-600/20"
+                >
+                  <Mail className="w-5 h-5" />
+                  Get in touch
+                </a>
+                <button 
+                  onClick={copyEmail}
+                  className="absolute -bottom-12 left-0 text-[10px] font-bold font-mono text-zinc-400 hover:text-emerald-600 transition-colors uppercase tracking-widest flex items-center gap-2"
+                >
+                  {RESUME_DATA.email}
+                  <span className="px-1.5 py-0.5 rounded bg-zinc-100 text-[8px]">Copy</span>
+                </button>
+                {showEmailToast && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="absolute -top-12 left-0 px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-lg shadow-lg"
+                  >
+                    Email copied to clipboard!
+                  </motion.div>
+                )}
+              </div>
               <div className="flex gap-3">
-                <a href={`https://${RESUME_DATA.linkedin}`} target="_blank" rel="noreferrer" className="p-4 bg-white border border-zinc-200 rounded-xl hover:border-emerald-500 transition-all text-zinc-400 hover:text-emerald-600 shadow-sm">
+                <a href={RESUME_DATA.linkedin} target="_blank" rel="noreferrer" className="p-4 bg-white border border-zinc-200 rounded-xl hover:border-emerald-500 transition-all text-zinc-400 hover:text-emerald-600 shadow-sm">
                   <Linkedin className="w-6 h-6" />
                 </a>
-                <a href="#" className="p-4 bg-white border border-zinc-200 rounded-xl hover:border-emerald-500 transition-all text-zinc-400 hover:text-emerald-600 shadow-sm">
+                <a href={RESUME_DATA.github} target="_blank" rel="noreferrer" className="p-4 bg-white border border-zinc-200 rounded-xl hover:border-emerald-500 transition-all text-zinc-400 hover:text-emerald-600 shadow-sm">
                   <Github className="w-6 h-6" />
                 </a>
               </div>
             </div>
           </motion.div>
+        </section>
+
+        {/* Core Tech Logos */}
+        <section className="mb-40">
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-50 hover:opacity-100 transition-opacity duration-500">
+            {RESUME_DATA.coreTech.map((tech, idx) => (
+              <motion.div
+                key={tech.name}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="flex flex-col items-center gap-3 group cursor-default"
+              >
+                <div className="w-10 h-10 md:w-12 md:h-12 transition-all duration-300 group-hover:scale-110 flex items-center justify-center">
+                  <tech.icon size="100%" color={tech.color} />
+                </div>
+                <span className="text-[10px] font-bold font-mono uppercase tracking-widest text-zinc-400 group-hover:text-zinc-900 transition-colors">{tech.name}</span>
+              </motion.div>
+            ))}
+          </div>
         </section>
 
         {/* Skills Grid */}
@@ -351,24 +432,30 @@ export default function App() {
           <p className="text-zinc-400 mb-12 max-w-lg mx-auto text-lg font-medium">
             Currently open to DevOps and Cloud Engineering roles. Feel free to reach out for collaborations or just a tech chat.
           </p>
-          <div className="flex flex-wrap justify-center gap-12 mb-20">
-            <a href={`mailto:${RESUME_DATA.email}`} className="text-zinc-400 hover:text-emerald-600 transition-all flex flex-col items-center gap-3 group">
+          <div className="flex flex-wrap justify-center items-start gap-12 mb-20">
+            <a href={`mailto:${RESUME_DATA.email}`} className="text-zinc-400 hover:text-emerald-600 transition-all flex flex-col items-center gap-3 group w-24">
               <div className="p-4 rounded-2xl bg-zinc-50 group-hover:bg-emerald-50 transition-all">
                 <Mail className="w-8 h-8" />
               </div>
               <span className="text-xs font-bold font-mono uppercase tracking-widest">Email</span>
             </a>
-            <a href={`https://${RESUME_DATA.linkedin}`} target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-emerald-600 transition-all flex flex-col items-center gap-3 group">
+            <a href={RESUME_DATA.github} target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-emerald-600 transition-all flex flex-col items-center gap-3 group w-24">
+              <div className="p-4 rounded-2xl bg-zinc-50 group-hover:bg-emerald-50 transition-all">
+                <Github className="w-8 h-8" />
+              </div>
+              <span className="text-xs font-bold font-mono uppercase tracking-widest">GitHub</span>
+            </a>
+            <a href={RESUME_DATA.linkedin} target="_blank" rel="noreferrer" className="text-zinc-400 hover:text-emerald-600 transition-all flex flex-col items-center gap-3 group w-24">
               <div className="p-4 rounded-2xl bg-zinc-50 group-hover:bg-emerald-50 transition-all">
                 <Linkedin className="w-8 h-8" />
               </div>
               <span className="text-xs font-bold font-mono uppercase tracking-widest">LinkedIn</span>
             </a>
-            <div className="text-zinc-400 flex flex-col items-center gap-3 group">
+            <div className="text-zinc-400 flex flex-col items-center gap-3 group w-24">
               <div className="p-4 rounded-2xl bg-zinc-50">
                 <Phone className="w-8 h-8" />
               </div>
-              <span className="text-xs font-bold font-mono uppercase tracking-widest">{RESUME_DATA.phone}</span>
+              <span className="text-xs font-bold font-mono uppercase tracking-widest">Call</span>
             </div>
           </div>
           <p className="text-zinc-300 text-xs font-bold font-mono uppercase tracking-[0.3em] pb-10">
